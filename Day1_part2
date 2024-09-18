@@ -1,0 +1,71 @@
+# Reading and storing file data
+file = open("Day1Data2.txt", "r")
+read_file = file.read()
+file.close()
+lines_array = read_file.strip().split("\n")
+
+
+# Using an array and functions to find text-based numbers
+number_reference = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+
+
+# function for finding value that the text may or may not represent as a number
+def find_value(str_number, array):
+    for y in range(0, 8):
+        if array[y]:
+            return y+1
+    return -1
+
+
+# Function which checks if the current letter matches any other number at that location, to prevent strings which are
+# not like any of the numbers from being carried forward
+def check_text_number(str_letter, array, location):
+    for y in range(0, 8):
+        if array[y][location] == str_letter:
+            return True
+
+    return False
+
+
+# Extrapolating numbers out of data
+numbers_array = [0]*len(lines_array)
+for i in range(0, len(lines_array)):
+
+    # Initialising data for use in finding numbers in text
+    found_num_array = []
+    text_number_array = []
+    number_text = ""
+    text_counter = 0
+    last_number = 0
+
+    # Cycling through each character in the line
+    for x in range(0, len(lines_array[i])):
+        if 48 <= ord(lines_array[i][x]) <= 57:
+            found_num_array.append(lines_array[i][x])
+            if text_counter > 2:
+                text_number_array.append(number_text)
+            text_counter = 0
+
+
+        elif check_text_number(lines_array[i][x], number_reference, text_counter):
+            text_counter += 1
+            number_text += lines_array[i][x]
+
+        else:
+            text_counter = 0
+            if text_counter > 2:
+                text_number_array.append(number_text)
+
+        if find_value(number_text, number_reference) != -1:
+            found_num_array.append(str(find_value(number_text, number_reference)))
+
+    new_number = found_num_array[0] + found_num_array[len(found_num_array)-1]
+
+    numbers_array[i] = int(new_number)
+
+# Taking sum of numbers
+num_sum = 0
+for x in range(0, len(numbers_array)):
+    num_sum += numbers_array[x]
+
+print(num_sum)
