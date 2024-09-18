@@ -1,0 +1,23 @@
+# Reading and storing file data
+file = open("Day1Data1.txt", "r")
+read_file = file.read()
+file.close()
+lines_array = read_file.strip().split("\n")
+
+# Extrapolating number out of data
+numbers_array = [0]*len(lines_array)
+for i in range(0, len(lines_array)):
+    found_num_array = []
+    for x in range(0, len(lines_array[i])):
+        if 48 <= ord(lines_array[i][x]) <= 57:
+            found_num_array.append(lines_array[i][x])
+    new_number = found_num_array[0] + found_num_array[len(found_num_array)-1]
+
+    numbers_array[i] = int(new_number)
+
+# Taking sum of numbers
+sum = 0
+for x in range(0, len(numbers_array)):
+    sum += numbers_array[x]
+
+print(sum)
